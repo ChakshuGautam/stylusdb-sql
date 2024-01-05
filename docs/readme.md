@@ -14,8 +14,8 @@ This project will be complete in 20 steps and will take about 2-20 hours to comp
 - [x] Step 8: Adding INNER JOIN support
 - [x] Step 9: Adding LEFT and RIGHT JOIN support
 - [x] Step 10: Group By and Aggregate Functions
-- [ ] Step 11: Implementing ORDER BY Clause
-- [ ] Step 12: Adding LIMIT Clause
+- [x] Step 11: Implementing ORDER BY Clause
+- [x] Step 12: Adding LIMIT Clause
 - [ ] Step 13: Enhancing the Parser for Subqueries
 - [ ] Step 14: Error Handling and Validation
 - [ ] Step 15: Implementing DISTINCT Keyword

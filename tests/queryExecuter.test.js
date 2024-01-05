@@ -280,3 +280,35 @@ test('Execute SQL Query with ORDER BY and GROUP BY', async () => {
         { age: '22', 'COUNT(id) as count': 1 }
     ]);
 });
+
+test('Execute SQL Query with standard LIMIT clause', async () => {
+    const query = 'SELECT id, name FROM student LIMIT 2';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toEqual(2);
+});
+
+test('Execute SQL Query with LIMIT clause equal to total rows', async () => {
+    const query = 'SELECT id, name FROM student LIMIT 4';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toEqual(4);
+});
+
+test('Execute SQL Query with LIMIT clause exceeding total rows', async () => {
+    const query = 'SELECT id, name FROM student LIMIT 10';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toEqual(4); // Total rows in student.csv
+});
+
+test('Execute SQL Query with LIMIT 0', async () => {
+    const query = 'SELECT id, name FROM student LIMIT 0';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toEqual(0);
+});
+
+test('Execute SQL Query with LIMIT and ORDER BY clause', async () => {
+    const query = 'SELECT id, name FROM student ORDER BY age DESC LIMIT 2';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toEqual(2);
+    expect(result[0].name).toEqual('John');
+    expect(result[1].name).toEqual('Jane');
+});

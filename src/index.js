@@ -103,15 +103,10 @@ async function executeSELECTQuery(query) {
                 throw new Error(`Unsupported JOIN type: ${joinType}`);
         }
     }
-
-    console.log("AFTER JOIN", data);
-    console.log("WHERE CLAUSES", whereClauses);
     // Apply WHERE clause filtering after JOIN (or on the original data if no join)
     const filteredData = whereClauses.length > 0
         ? data.filter(row => whereClauses.every(clause => evaluateCondition(row, clause)))
         : data;
-
-    // console.log("AFTER WHERE", filteredData);
 
     // Select the specified fields
     return filteredData.map(row => {
@@ -135,8 +130,6 @@ function evaluateCondition(row, clause) {
     // Parse row value and condition value based on their actual types
     const rowValue = parseValue(row[field]);
     let conditionValue = parseValue(value);
-
-    // console.log("EVALUATING", rowValue, operator, conditionValue, typeof (rowValue), typeof (conditionValue));
 
     switch (operator) {
         case '=': return rowValue === conditionValue;

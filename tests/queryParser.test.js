@@ -112,7 +112,6 @@ describe('parseJoinClause', () => {
     test('Returns null for queries without JOIN', () => {
         const query = 'SELECT * FROM table1';
         const result = parseJoinClause(query);
-        console.log({ result });
         expect(result).toEqual(
             {
                 joinType: null,

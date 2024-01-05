@@ -5,15 +5,35 @@ function parseQuery(query) {
     // Trim the query to remove any leading/trailing whitespaces
     query = query.trim();
 
-    // Split the query at the GROUP BY clause if it exists
-    const groupBySplit = query.split(/\sGROUP BY\s/i);
-    const queryWithoutGroupBy = groupBySplit[0]; // Everything before GROUP BY clause
+    // Updated regex to capture ORDER BY clause
+    const orderByRegex = /\sORDER BY\s(.+)/i;
+    const orderByMatch = query.match(orderByRegex);
 
-    // GROUP BY clause is the second part after splitting, if it exists
-    let groupByFields = groupBySplit.length > 1 ? groupBySplit[1].trim().split(',').map(field => field.trim()) : null;
+    let orderByFields = null;
+    if (orderByMatch) {
+        orderByFields = orderByMatch[1].split(',').map(field => {
+            const [fieldName, order] = field.trim().split(/\s+/);
+            return { fieldName, order: order ? order.toUpperCase() : 'ASC' };
+        });
+    }
+
+    // Remove ORDER BY clause from the query for further processing
+    query = query.replace(orderByRegex, '');
+
+    // Split the query at the GROUP BY clause if it exists
+    const groupByRegex = /\sGROUP BY\s(.+)/i;
+    const groupByMatch = query.match(groupByRegex);
+
+    let groupByFields = null;
+    if (groupByMatch) {
+        groupByFields = groupByMatch[1].split(',').map(field => field.trim());
+    }
+
+    // Remove GROUP BY clause from the query for further processing
+    query = query.replace(groupByRegex, '');
 
     // Split the query at the WHERE clause if it exists
-    const whereSplit = queryWithoutGroupBy.split(/\sWHERE\s/i);
+    const whereSplit = query.split(/\sWHERE\s/i);
     const queryWithoutWhere = whereSplit[0]; // Everything before WHERE clause
 
     // WHERE clause is the second part after splitting, if it exists
@@ -53,6 +73,7 @@ function parseQuery(query) {
         joinTable,
         joinCondition,
         groupByFields,
+        orderByFields,
         hasAggregateWithoutGroupBy
     };
 }

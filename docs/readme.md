@@ -12,7 +12,7 @@ This project will be complete in 20 steps and will take about 2-20 hours to comp
 - [x] Step 6: Handling multiple conditions in WHERE clause
 - [x] Step 7: Handling Different Comparison Operators
 - [x] Step 8: Adding INNER JOIN support
-- [ ] Step 9: Adding LEFT and RIGHT JOIN support
+- [x] Step 9: Adding LEFT and RIGHT JOIN support
 - [ ] Step 10: Group By and Aggregate Functions
 - [ ] Step 11: Implementing ORDER BY Clause
 - [ ] Step 12: Adding LIMIT Clause

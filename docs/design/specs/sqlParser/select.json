@@ -1,0 +1,158 @@
+{
+    "dialect": "PostgreSQL",
+    "with": [
+        {
+            "name": "recursiveCTE",
+            "as": {
+                "baseQuery": {
+                    "select": [
+                        "id",
+                        "parent_id",
+                        "name"
+                    ],
+                    "from": [
+                        {
+                            "table": "categories",
+                            "alias": "c"
+                        }
+                    ],
+                    "where": [
+                        {
+                            "field": "c.parent_id",
+                            "operator": "IS",
+                            "value": "NULL",
+                            "valueType": "raw"
+                        }
+                    ]
+                },
+                "recursiveQuery": {
+                    "select": [
+                        "c.id",
+                        "c.parent_id",
+                        "c.name"
+                    ],
+                    "from": [
+                        {
+                            "table": "categories",
+                            "alias": "c"
+                        }
+                    ],
+                    "join": {
+                        "table": "recursiveCTE",
+                        "alias": "r",
+                        "on": [
+                            {
+                                "left": "c.parent_id",
+                                "right": "r.id",
+                                "operator": "="
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "select": [
+        {
+            "field": "student.name",
+            "alias": "studentName"
+        },
+        {
+            "field": "enrollment.course",
+            "alias": "course"
+        },
+        {
+            "subquery": {
+                "select": [
+                    "COUNT(*)"
+                ],
+                "from": [
+                    {
+                        "table": "exam_results",
+                        "alias": "er"
+                    }
+                ],
+                "where": [
+                    {
+                        "field": "er.student_id",
+                        "operator": "=",
+                        "fieldFromOuterQuery": "s.id"
+                    }
+                ]
+            },
+            "alias": "examCount"
+        }
+    ],
+    "from": [
+        {
+            "table": "student",
+            "alias": "s",
+            "indexHint": "USE INDEX (idx_student_name)"
+        },
+        {
+            "table": "recursiveCTE",
+            "alias": "r"
+        }
+    ],
+    "joins": [
+        {
+            "type": "INNER",
+            "table": "enrollment",
+            "alias": "e",
+            "on": [
+                {
+                    "left": "s.id",
+                    "right": "e.student_id",
+                    "operator": "="
+                },
+                {
+                    "left": "s.department",
+                    "right": "e.department",
+                    "operator": "=",
+                    "logic": "AND"
+                }
+            ],
+            "indexHint": "FORCE INDEX (idx_enrollment_date)"
+        }
+    ],
+    "where": [
+        {
+            "field": "s.age",
+            "operator": ">",
+            "placeholder": ":age",
+            "valueType": "integer"
+        }
+    ],
+    "groupBy": [
+        "e.department"
+    ],
+    "having": [
+        {
+            "field": "COUNT(*)",
+            "operator": ">",
+            "placeholder": ":count",
+            "valueType": "integer"
+        }
+    ],
+    "orderBy": [
+        {
+            "field": "studentName",
+            "direction": "ASC"
+        }
+    ],
+    "limit": ":limit",
+    "offset": ":offset",
+    "parameters": {
+        ":age": 20,
+        ":count": 5,
+        ":limit": 10,
+        ":offset": 0
+    },
+    "performanceHints": {
+        "useIndex": [
+            "student (idx_student_age)"
+        ],
+        "optimizeFor": "speed",
+        "avoidFullTableScans": true
+    }
+}

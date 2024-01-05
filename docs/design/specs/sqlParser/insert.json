@@ -1,0 +1,28 @@
+{
+    "dialect": "PostgreSQL",
+    "queryType": "INSERT",
+    "insert": {
+        "into": "student",
+        "columns": [
+            "name",
+            "age",
+            "department"
+        ],
+        "values": [
+            [
+                "John Doe",
+                22,
+                "Science"
+            ],
+            [
+                "Jane Smith",
+                20,
+                "Mathematics"
+            ]
+        ]
+    },
+    "returning": [
+        "id",
+        "name"
+    ]
+}

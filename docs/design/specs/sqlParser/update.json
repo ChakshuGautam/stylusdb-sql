@@ -1,0 +1,37 @@
+{
+    "dialect": "PostgreSQL",
+    "queryType": "UPDATE",
+    "update": {
+        "table": "student",
+        "set": [
+            {
+                "field": "name",
+                "value": ":newName",
+                "valueType": "string"
+            },
+            {
+                "field": "age",
+                "value": ":newAge",
+                "valueType": "integer"
+            }
+        ],
+        "where": [
+            {
+                "field": "id",
+                "operator": "=",
+                "placeholder": ":id",
+                "valueType": "integer"
+            }
+        ]
+    },
+    "returning": [
+        "id",
+        "name",
+        "age"
+    ],
+    "parameters": {
+        ":newName": "Jane Doe",
+        ":newAge": 23,
+        ":id": 1
+    }
+}

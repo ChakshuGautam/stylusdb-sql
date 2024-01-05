@@ -1,0 +1,22 @@
+{
+    "dialect": "PostgreSQL",
+    "queryType": "DELETE",
+    "delete": {
+        "from": "student",
+        "where": [
+            {
+                "field": "age",
+                "operator": ">",
+                "placeholder": ":age",
+                "valueType": "integer"
+            }
+        ]
+    },
+    "returning": [
+        "id",
+        "name"
+    ],
+    "parameters": {
+        ":age": 25
+    }
+}

@@ -450,3 +450,9 @@ test('Parse SQL Query with negative number in LIMIT clause', () => {
     // Assuming the parser sets limit to null for invalid values
     expect(parsed.limit).toBeNull();
 });
+
+test('Error Handling with Malformed Query', async () => {
+    const query = 'SELECT FROM table'; // intentionally malformed
+    expect(() => parseQuery(query)).toThrow("Query parsing error: Invalid SELECT format");
+});
+

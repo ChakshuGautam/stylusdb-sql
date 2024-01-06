@@ -16,19 +16,27 @@ This project will be complete in 20 steps and will take about 2-20 hours to comp
 - [x] Step 10: Group By and Aggregate Functions
 - [x] Step 11: Implementing ORDER BY Clause
 - [x] Step 12: Adding LIMIT Clause
-- [ ] Step 13: Enhancing the Parser for Subqueries
-- [ ] Step 14: Error Handling and Validation
-- [ ] Step 15: Implementing DISTINCT Keyword
-- [ ] Step 16: Adding Support for LIKE Operator
-- [ ] Step 17: Implementing SET Operations (UNION, INTERSECT, EXCEPT)
-- [ ] Step 18: Refactoring and Code Cleanup (Not a Tutorial Step - skip)
+- [x] Step 13: Error Handling and Validation
+- [ ] Step 14: Implementing DISTINCT Keyword
+- [ ] Step 15: Adding Support for LIKE Operator
+- [ ] Step 16: Adding CI Support
+- [ ] Step 17: Basic INSERT Statement Support
+- [ ] Step 18: Basic DELETE Statement Support
 - [ ] Step 19: CLI Integration
 - [ ] Step 20: Packaging and Publishing
+
+
+
+## Refactoring and Code Cleanup
+This will be done post Step 20 to ensure that the code is clean and readable. This will also be a good time to add tests and documentation.
+
 
 ## Next Steps
 There is a laundry list of features and improvements that can be added to this project. Here are some ideas for further development. The objective is to always add more features in a similar format - A tutorial-style guide with step-by-step instructions. A lot of these are challenging and should be broken down into smaller steps.
 
+- [ ] Implementing SET Operations (UNION, INTERSECT, EXCEPT)
 - [ ] INSERT Statement Support: Implement the capability to insert new data into existing CSV files. This includes parsing INSERT SQL statements and updating the CSV file while ensuring data integrity.
+- [ ] Enhancing the Parser for Subqueries
 - [ ] Data Update and Delete Operations: Along with INSERT, support UPDATE and DELETE operations. This allows for full data manipulation capabilities, similar to a traditional database.
 - [ ] Schema Definition and Evolution: Provide functionality for defining a schema for CSV files (column names, data types, etc.) and mechanisms to evolve the schema over time (adding/removing columns, changing data types).
 - [ ] Schema Validation: Include features to validate data against the defined schema during insertions and updates, ensuring data quality and consistency.

@@ -179,7 +179,7 @@ function checkAggregateWithoutGroupBy(query, groupByFields) {
 }
 
 function parseWhereClause(whereString) {
-    const conditionRegex = /(.*?)(=|!=|>|<|>=|<=)(.*)/;
+    const conditionRegex = /(.*?)(=|!=|>=|<=|>|<)(.*)/;
     return whereString.split(/ AND | OR /i).map(conditionString => {
         const match = conditionString.match(conditionRegex);
         if (match) {

@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test-verbose": "jest --verbose"
   },
   "keywords": [],
   "author": "Chakshu Gautam",

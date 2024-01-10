@@ -586,3 +586,78 @@ test('Parse SQL Query with DISTINCT on All Columns', () => {
         hasAggregateWithoutGroupBy: false
     });
 });
+
+test('Parse SQL Query with LIKE Clause', () => {
+    const query = "SELECT name FROM student WHERE name LIKE '%Jane%'";
+    const parsed = parseQuery(query);
+    expect(parsed).toEqual({
+        fields: ['name'],
+        table: 'student',
+        whereClauses: [{ field: 'name', operator: 'LIKE', value: '%Jane%' }],
+        isDistinct: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        orderByFields: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false
+    });
+});
+
+test('Parse SQL Query with LIKE Clause and Wildcards', () => {
+    const query = "SELECT name FROM student WHERE name LIKE 'J%'";
+    const parsed = parseQuery(query);
+    expect(parsed).toEqual({
+        fields: ['name'],
+        table: 'student',
+        whereClauses: [{ field: 'name', operator: 'LIKE', value: 'J%' }],
+        isDistinct: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        orderByFields: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false
+    });
+});
+
+test('Parse SQL Query with Multiple LIKE Clauses', () => {
+    const query = "SELECT name FROM student WHERE name LIKE 'J%' AND age LIKE '2%'";
+    const parsed = parseQuery(query);
+    expect(parsed).toEqual({
+        fields: ['name'],
+        table: 'student',
+        whereClauses: [
+            { field: 'name', operator: 'LIKE', value: 'J%' },
+            { field: 'age', operator: 'LIKE', value: '2%' }
+        ],
+        isDistinct: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        orderByFields: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false
+    });
+});
+
+test('Parse SQL Query with LIKE and ORDER BY Clauses', () => {
+    const query = "SELECT name FROM student WHERE name LIKE '%e%' ORDER BY age DESC";
+    const parsed = parseQuery(query);
+    expect(parsed).toEqual({
+        fields: ['name'],
+        table: 'student',
+        whereClauses: [{ field: 'name', operator: 'LIKE', value: '%e%' }],
+        orderByFields: [{ fieldName: 'age', order: 'DESC' }],
+        isDistinct: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false
+    });
+});

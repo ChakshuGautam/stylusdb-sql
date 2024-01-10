@@ -18,7 +18,7 @@ This project will be complete in 20 steps and will take about 2-20 hours to comp
 - [x] Step 12: Adding LIMIT Clause
 - [x] Step 13: Error Handling and Validation
 - [x] Step 14: Implementing DISTINCT Keyword
-- [ ] Step 15: Adding Support for LIKE Operator
+- [x] Step 15: Adding Support for LIKE Operator
 - [ ] Step 16: Adding CI Support
 - [ ] Step 17: Basic INSERT Statement Support
 - [ ] Step 18: Basic DELETE Statement Support

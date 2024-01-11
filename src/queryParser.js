@@ -100,7 +100,7 @@ function checkAggregateWithoutGroupBy(query, groupByFields) {
 }
 
 function parseWhereClause(whereString) {
-    const conditionRegex = /(.*?)(=|!=|>|<|>=|<=)(.*)/;
+    const conditionRegex = /(.*?)(=|!=|>=|<=|>|<)(.*)/;
     return whereString.split(/ AND | OR /i).map(conditionString => {
         if (conditionString.includes(' LIKE ')) {
             const [field, pattern] = conditionString.split(/\sLIKE\s/i);

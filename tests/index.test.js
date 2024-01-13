@@ -785,3 +785,38 @@ test('DISTINCT with ORDER BY and LIMIT', async () => {
     // Expecting the two highest unique ages
     expect(result).toEqual([{ age: '30' }, { age: '25' }]);
 });
+
+test('Execute SQL Query with LIKE Operator for Name', async () => {
+    const query = "SELECT name FROM student WHERE name LIKE '%Jane%'";
+    const result = await executeSELECTQuery(query);
+    // Expecting names containing 'Jane'
+    expect(result).toEqual([{ name: 'Jane' }]);
+});
+
+test('Execute SQL Query with LIKE Operator and Wildcards', async () => {
+    const query = "SELECT name FROM student WHERE name LIKE 'J%'";
+    const result = await executeSELECTQuery(query);
+    // Expecting names starting with 'J'
+    expect(result).toEqual([{ name: 'John' }, { name: 'Jane' }]);
+});
+
+test('Execute SQL Query with LIKE Operator Case Insensitive', async () => {
+    const query = "SELECT name FROM student WHERE name LIKE '%bob%'";
+    const result = await executeSELECTQuery(query);
+    // Expecting names 'Bob' (case insensitive)
+    expect(result).toEqual([{ name: 'Bob' }]);
+});
+
+test('Execute SQL Query with LIKE Operator and DISTINCT', async () => {
+    const query = "SELECT DISTINCT name FROM student WHERE name LIKE '%e%'";
+    const result = await executeSELECTQuery(query);
+    // Expecting unique names containing 'e'
+    expect(result).toEqual([{ name: 'Jane' }, { name: 'Alice' }]);
+});
+
+test('LIKE with ORDER BY and LIMIT', async () => {
+    const query = "SELECT name FROM student WHERE name LIKE '%a%' ORDER BY name ASC LIMIT 2";
+    const result = await executeSELECTQuery(query);
+    // Expecting the first two names alphabetically that contain 'a'
+    expect(result).toEqual([{ name: 'Alice' }, { name: 'Jane' }]);
+});

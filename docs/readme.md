@@ -19,9 +19,9 @@ This project will be complete in 20 steps and will take about 2-20 hours to comp
 - [x] Step 13: Error Handling and Validation
 - [x] Step 14: Implementing DISTINCT Keyword
 - [x] Step 15: Adding Support for LIKE Operator
-- [ ] Step 16: Adding CI Support
-- [ ] Step 17: Basic INSERT Statement Support
-- [ ] Step 18: Basic DELETE Statement Support
+- [x] Step 16: Adding CI Support
+- [x] Step 17: Basic INSERT Statement Support
+- [x] Step 18: Basic DELETE Statement Support
 - [ ] Step 19: CLI Integration
 - [ ] Step 20: Packaging and Publishing
 

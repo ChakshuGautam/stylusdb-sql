@@ -1,7 +1,7 @@
 /*
 Creating a Query Parser which can parse SQL `SELECT` Queries only.
 // */
-function parseQuery(query) {
+function parseSelectQuery(query) {
     try {
 
         // Trim the query to remove any leading/trailing whitespaces
@@ -100,7 +100,7 @@ function checkAggregateWithoutGroupBy(query, groupByFields) {
 }
 
 function parseWhereClause(whereString) {
-    const conditionRegex = /(.*?)(=|!=|>|<|>=|<=)(.*)/;
+    const conditionRegex = /(.*?)(=|!=|>=|<=|>|<)(.*)/;
     return whereString.split(/ AND | OR /i).map(conditionString => {
         if (conditionString.includes(' LIKE ')) {
             const [field, pattern] = conditionString.split(/\sLIKE\s/i);
@@ -138,4 +138,21 @@ function parseJoinClause(query) {
     };
 }
 
-module.exports = { parseQuery, parseJoinClause };
+function parseInsertQuery(query) {
+    const insertRegex = /INSERT INTO (\w+)\s\((.+)\)\sVALUES\s\((.+)\)/i;
+    const match = query.match(insertRegex);
+
+    if (!match) {
+        throw new Error("Invalid INSERT INTO syntax.");
+    }
+
+    const [, table, columns, values] = match;
+    return {
+        type: 'INSERT',
+        table: table.trim(),
+        columns: columns.split(',').map(column => column.trim()),
+        values: values.split(',').map(value => value.trim())
+    };
+}
+
+module.exports = { parseSelectQuery, parseJoinClause, parseInsertQuery };

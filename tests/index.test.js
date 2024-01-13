@@ -268,6 +268,7 @@ test('Parse SQL Query', () => {
         joinType: null,
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -287,6 +288,7 @@ test('Parse SQL Query with WHERE Clause', () => {
         joinType: null,
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -310,6 +312,7 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
         joinType: null,
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -325,6 +328,7 @@ test('Parse SQL Query with INNER JOIN', async () => {
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     })
 });
 
@@ -340,6 +344,7 @@ test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     })
 });
 
@@ -397,6 +402,7 @@ test('Parse LEFT Join Query Completely', () => {
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     })
 })
 
@@ -412,6 +418,7 @@ test('Parse LEFT Join Query Completely', () => {
         joinCondition: { left: 'student.id', right: 'enrollment.student_id' },
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     })
 })
 
@@ -427,6 +434,7 @@ test('Parse SQL Query with LEFT JOIN with a WHERE clause filtering the main tabl
         "whereClauses": [{ "field": "student.age", "operator": ">", "value": "22" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -442,6 +450,7 @@ test('Parse SQL Query with LEFT JOIN with a WHERE clause filtering the join tabl
         "whereClauses": [{ "field": "enrollment.course", "operator": "=", "value": "'Physics'" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -457,6 +466,7 @@ test('Parse SQL Query with RIGHT JOIN with a WHERE clause filtering the main tab
         "whereClauses": [{ "field": "student.age", "operator": "<", "value": "25" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -472,6 +482,7 @@ test('Parse SQL Query with RIGHT JOIN with a WHERE clause filtering the join tab
         "whereClauses": [{ "field": "enrollment.course", "operator": "=", "value": "'Chemistry'" }],
         groupByFields: null,
         hasAggregateWithoutGroupBy: false,
+        "orderByFields": null
     });
 });
 
@@ -488,6 +499,7 @@ test('Parse COUNT Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "orderByFields": null
     });
 });
 
@@ -504,6 +516,7 @@ test('Parse SUM Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "orderByFields": null
     });
 });
 
@@ -519,6 +532,7 @@ test('Parse AVG Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "orderByFields": null
     });
 });
 
@@ -534,6 +548,7 @@ test('Parse MIN Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "orderByFields": null
     });
 });
 
@@ -549,6 +564,7 @@ test('Parse MAX Aggregate Query', () => {
         "joinCondition": null,
         "joinTable": null,
         "joinType": null,
+        "orderByFields": null
     });
 });
 
@@ -563,7 +579,8 @@ test('Parse basic GROUP BY query', () => {
         joinType: null,
         joinTable: null,
         joinCondition: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        orderByFields: null
     });
 });
 
@@ -578,7 +595,8 @@ test('Parse GROUP BY query with WHERE clause', () => {
         joinType: null,
         joinTable: null,
         joinCondition: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        orderByFields: null
     });
 });
 
@@ -593,7 +611,8 @@ test('Parse GROUP BY query with multiple fields', () => {
         joinType: null,
         joinTable: null,
         joinCondition: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        orderByFields: null
     });
 });
 
@@ -611,6 +630,40 @@ test('Parse GROUP BY query with JOIN and WHERE clauses', () => {
             left: 'student.id',
             right: 'enrollment.student_id'
         },
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        orderByFields: null
     });
+});
+
+test('Execute SQL Query with ORDER BY', async () => {
+    const query = 'SELECT name FROM student ORDER BY name ASC';
+    const result = await executeSELECTQuery(query);
+
+    expect(result).toStrictEqual([
+        { name: 'Alice' },
+        { name: 'Bob' },
+        { name: 'Jane' },
+        { name: 'John' }
+    ]);
+});
+
+test('Execute SQL Query with ORDER BY and WHERE', async () => {
+    const query = 'SELECT name FROM student WHERE age > 24 ORDER BY name DESC';
+    const result = await executeSELECTQuery(query);
+
+    expect(result).toStrictEqual([
+        { name: 'John' },
+        { name: 'Jane' },
+    ]);
+});
+test('Execute SQL Query with ORDER BY and GROUP BY', async () => {
+    const query = 'SELECT COUNT(id) as count, age FROM student GROUP BY age ORDER BY age DESC';
+    const result = await executeSELECTQuery(query);
+
+    expect(result).toStrictEqual([
+        { age: '30', 'COUNT(id) as count': 1 },
+        { age: '25', 'COUNT(id) as count': 1 },
+        { age: '24', 'COUNT(id) as count': 1 },
+        { age: '22', 'COUNT(id) as count': 1 }
+    ]);
 });

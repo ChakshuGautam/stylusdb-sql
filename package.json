@@ -1,8 +1,8 @@
 {
   "name": "stylusdb-sql",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A minimal SQL based DB based on CSV files. For educational purposes only.",
-  "main": "index.js",
+  "main": "./src/index.js",
   "directories": {
     "doc": "docs"
   },

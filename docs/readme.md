@@ -22,9 +22,8 @@ This project will be complete in 20 steps and will take about 2-20 hours to comp
 - [x] Step 16: Adding CI Support
 - [x] Step 17: Basic INSERT Statement Support
 - [x] Step 18: Basic DELETE Statement Support
-- [ ] Step 19: CLI Integration
-- [ ] Step 20: Packaging and Publishing
-
+- [x] Step 19: CLI Integration
+- [x] Step 20: Packaging and Publishing
 
 
 ## Refactoring and Code Cleanup

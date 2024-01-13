@@ -2,22 +2,26 @@
 Creating a Query Parser which can parse SQL `SELECT` Queries only.
 */
 function parseQuery(query) {
-    // First, let's trim the query to remove any leading/trailing whitespaces
+    // Trim the query to remove any leading/trailing whitespaces
     query = query.trim();
 
-    // Initialize variables for different parts of the query
-    let selectPart, fromPart;
+    // Split the query at the GROUP BY clause if it exists
+    const groupBySplit = query.split(/\sGROUP BY\s/i);
+    const queryWithoutGroupBy = groupBySplit[0]; // Everything before GROUP BY clause
+
+    // GROUP BY clause is the second part after splitting, if it exists
+    let groupByFields = groupBySplit.length > 1 ? groupBySplit[1].trim().split(',').map(field => field.trim()) : null;
 
     // Split the query at the WHERE clause if it exists
-    const whereSplit = query.split(/\sWHERE\s/i);
-    query = whereSplit[0]; // Everything before WHERE clause
+    const whereSplit = queryWithoutGroupBy.split(/\sWHERE\s/i);
+    const queryWithoutWhere = whereSplit[0]; // Everything before WHERE clause
 
     // WHERE clause is the second part after splitting, if it exists
     const whereClause = whereSplit.length > 1 ? whereSplit[1].trim() : null;
 
     // Split the remaining query at the JOIN clause if it exists
-    const joinSplit = query.split(/\s(INNER|LEFT|RIGHT) JOIN\s/i);
-    selectPart = joinSplit[0].trim(); // Everything before JOIN clause
+    const joinSplit = queryWithoutWhere.split(/\s(INNER|LEFT|RIGHT) JOIN\s/i);
+    const selectPart = joinSplit[0].trim(); // Everything before JOIN clause
 
     // Parse the SELECT part
     const selectRegex = /^SELECT\s(.+?)\sFROM\s(.+)/i;
@@ -28,7 +32,8 @@ function parseQuery(query) {
 
     const [, fields, table] = selectMatch;
 
-    const { joinType, joinTable, joinCondition } = parseJoinClause(query);
+    // Extract JOIN information
+    const { joinType, joinTable, joinCondition } = parseJoinClause(queryWithoutWhere);
 
     // Parse the WHERE part if it exists
     let whereClauses = [];
@@ -36,15 +41,22 @@ function parseQuery(query) {
         whereClauses = parseWhereClause(whereClause);
     }
 
+    // Check for the presence of aggregate functions without GROUP BY
+    const aggregateFunctionRegex = /(\bCOUNT\b|\bAVG\b|\bSUM\b|\bMIN\b|\bMAX\b)\s*\(\s*(\*|\w+)\s*\)/i;
+    const hasAggregateWithoutGroupBy = aggregateFunctionRegex.test(query) && !groupByFields;
+
     return {
         fields: fields.split(',').map(field => field.trim()),
         table: table.trim(),
         whereClauses,
         joinType,
         joinTable,
-        joinCondition
+        joinCondition,
+        groupByFields,
+        hasAggregateWithoutGroupBy
     };
 }
+
 
 function parseWhereClause(whereString) {
     const conditionRegex = /(.*?)(=|!=|>|<|>=|<=)(.*)/;

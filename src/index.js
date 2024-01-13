@@ -1,6 +1,6 @@
-const { readCSV, writeCSV } = require('./readCSV');
-const { parseSelectQuery, parseInsertQuery, parseDeleteQuery } = require('./queryParser');
-const { executeSELECTQuery, executeINSERTQuery, executeDELETEQuery } = require('./executeSELECTQuery');
+const { readCSV, writeCSV } = require('./csvStorage.js');
+const { parseSelectQuery, parseInsertQuery, parseDeleteQuery } = require('./queryParser.js');
+const { executeSELECTQuery, executeINSERTQuery, executeDELETEQuery } = require('./queryExecuter.js');
 
 module.exports = {
     readCSV,

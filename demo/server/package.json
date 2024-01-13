@@ -1,0 +1,17 @@
+{
+    "name": "stylusdb-sql-demo",
+    "version": "0.0.0",
+    "description": "Demo for Stylusdb SQL",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "keywords": [],
+    "author": "Chakshu Gautam",
+    "license": "ISC",
+    "dependencies": {
+        "node-pty": "^1.0.0",
+        "stylusdb-sql": "^0.1.5",
+        "ws": "^8.16.0"
+    }
+}

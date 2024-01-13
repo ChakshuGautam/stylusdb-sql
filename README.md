@@ -81,4 +81,13 @@ const deletedCourse = updatedData.find(course => course.course_id === '2');
 
 ### CLI Usage
 
+Open a terminal and run the following command to start the CLI:
+```bash
+stylusdb-sql
+```
+Execute a query as shown below.
+<img src="https://github.com/ChakshuGautam/stylusdb-sql/blob/36245e339c192028a0f4e60274deebc38b190496/docs/tutorials/assets/tutorial-19.gif?raw=true" />
 
+### Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md)

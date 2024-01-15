@@ -138,46 +138,6 @@ function parseJoinClause(query) {
     };
 }
 
-// function parseInsertQuery(query) {
-//     // Remove schema names
-//     let simplifiedQuery = query.replace(/"?\w+"?\."(\w+)"?/g, '$1');
-
-//     console.log({ simplifiedQuery });
-
-//     // Parse the INSERT INTO part
-//     const insertRegex = /INSERT INTO "?(\w+)"?\s\(([^)]+)\)\sVALUES\s\(([^)]+)\)/i;
-//     const match = simplifiedQuery.match(insertRegex);
-
-//     if (!match) {
-//         throw new Error("Invalid INSERT INTO syntax.");
-//     }
-
-//     const [, table, columns, values] = match;
-
-//     // Function to clean and remove quotes from a string
-//     const cleanValue = (value) => {
-//         return value.trim().replace(/^"?(.*?)"?$/g, '$1');
-//     };
-
-//     // Parse and clean columns and values
-//     const parsedColumns = columns.split(',').map(cleanValue);
-//     const parsedValues = values.split(',').map(cleanValue);
-
-//     // Parse the RETURNING part if present
-//     const returningMatch = simplifiedQuery.match(/RETURNING\s(.+)$/i);
-//     const returningColumns = returningMatch
-//         ? returningMatch[1].split(',').map(cleanValue)
-//         : [];
-
-//     return {
-//         type: 'INSERT',
-//         table: cleanValue(table),
-//         columns: parsedColumns,
-//         values: parsedValues,
-//         returningColumns
-//     };
-// }
-
 function parseInsertQuery(query) {
     // Simplify the query by removing schema names and table references from column names
     let simplifiedQuery = query.replace(/"?\w+"?\."(\w+)"?/g, '$1');

@@ -1,0 +1,23 @@
+{
+  "name": "stylusdb-example",
+  "version": "0.0.0",
+  "description": "A Node.js example of using StylusDB with all bells and whistles.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma": "node index.js"
+  },
+  "author": "Chakshu Gautam",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "prisma": "^5.8.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.0",
+    "stylusdb-sql-prisma-adapter": "^0.0.1"
+  }
+}

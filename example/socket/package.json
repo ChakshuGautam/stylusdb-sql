@@ -4,7 +4,7 @@
   "description": "Socket Connection Example for StylusDB",
   "main": "server.js",
   "scripts": {
-    "test": "node index.v2.js"
+    "test": "node index.js"
   },
   "author": "Chakshu Gautam",
   "license": "ISC"

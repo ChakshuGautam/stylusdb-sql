@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaStylusDBSQL } from 'stylusdb-sql-prisma-adapter';
-// const net = require('net');
 import net from 'net';
 
 

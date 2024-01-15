@@ -1,4 +1,4 @@
-const socket = new WebSocket("wss://stylusdb-sql-server.onrender.com");
+const socket = new WebSocket("ws://127.0.0.1:6060");
 
 var term = new window.Terminal({
     cursorBlink: true

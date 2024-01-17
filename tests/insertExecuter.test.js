@@ -88,7 +88,7 @@ test('Execute INSERT INTO Query for users with partial columns', async () => {
     await createUserCSV();
 
     // Execute INSERT statement
-    await executeINSERTQuery(`INSERT INTO "User" ("name") VALUES ("test")`);
+    await executeINSERTQuery(`INSERT INTO "user" ("name") VALUES ("test")`);
 
     // Read the updated CSV content
     const updatedData = await readCSV('user.csv');

@@ -10,26 +10,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
+      - uses: npm/action-setup@v2
         with:
           version: 8.x.x
 
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: pnpm
+          cache: npm
 
       - name: install dependencies
         run: |
           cd prisma/prisma-adapter
-          pnpm install --frozen-lockfile
+          npm install --frozen-lockfile
 
       - name: lint
         run: |
           cd prisma/prisma-adapter
-          pnpm lint
+          npm lint
 
       - name: build
         run: |
           cd prisma/prisma-adapter
-          pnpm build
+          npm build

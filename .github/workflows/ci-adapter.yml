@@ -22,9 +22,9 @@ jobs:
       - name: lint
         run: |
           cd prisma/prisma-adapter
-          npm lint
+          npm run lint
 
       - name: build
         run: |
           cd prisma/prisma-adapter
-          npm build
+          npm run build

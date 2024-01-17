@@ -76,11 +76,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 const connectionString = `${process.env.DATABASE_URL}`;
 
-// init prisma client
-const connection = connect({ url: connectionString });
-const adapter = new PrismaTiDBCloud(connection);
-const prisma = new PrismaClient({ adapter });
-
 const client = new Client(connectionString)
 const adapter = new PrismaStylusDBSQL(client, {})
 const prisma = new PrismaClient({ adapter })

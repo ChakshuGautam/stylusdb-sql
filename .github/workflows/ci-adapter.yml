@@ -1,4 +1,4 @@
-name: ci
+name: CI Adapter
 
 on:
   pull_request:
@@ -20,8 +20,16 @@ jobs:
           cache: pnpm
 
       - name: install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          cd prisma/prisma-adapter
+          pnpm install --frozen-lockfile
+
       - name: lint
-        run: pnpm lint
+        run: |
+          cd prisma/prisma-adapter
+          pnpm lint
+
       - name: build
-        run: pnpm build
+        run: |
+          cd prisma/prisma-adapter
+          pnpm build

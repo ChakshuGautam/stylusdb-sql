@@ -1,4 +1,4 @@
-name: Publish
+name: Publish Adapter to NPM
 
 on:
   release:

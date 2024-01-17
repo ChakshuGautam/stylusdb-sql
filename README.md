@@ -4,10 +4,14 @@
 This database is for educational purposes only. It is not intended for production use. It is written ground up in JavaScript and is a great way to learn how databases work. You can find all the code in the [src](./src) directory and the tutorial in the [docs](./docs) directory.
 
 ### Features
+- [x] Support for [Prisma](https://www.prisma.io/)
 - [x] `INSERT`, `DELETE`, `SELECT`
-- [ ] `UPDATE`, `CREATE TABLE`, `DROP TABLE`
 - [x] CLI
-- [ ] NPM Package
+- [x] Server/Client Basic Protocol
+- [x] NPM Package for StylusDB-SQL
+- [ ] `UPDATE`, `CREATE TABLE`, `DROP TABLE`
+- [ ] SQL Spec Tracker
+- [ ] Minimal PostgreSQL Protocol for Server/Client Communication
 
 ### Installation
 
@@ -16,6 +20,12 @@ npm i stylusdb-sql
 ```
 
 ### Usage
+
+#### Client
+For usage with the client, see documentation [here](./examples/client/README.md).
+
+#### With Prisma Client
+For usage with Prisma Client, see documentation [here](./prisma/prisma-adapter/README.md).
 
 #### SELECT
 Assuming you have a CSV file called `student.csv` with the following data:

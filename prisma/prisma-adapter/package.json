@@ -1,0 +1,37 @@
+{
+  "name": "stylusdb-sql-prisma-adapter",
+  "version": "0.0.1",
+  "description": "Prisma's driver adapter for StylusDB SQL",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup ./src/index.ts --format cjs,esm --dts",
+    "lint": "tsc -p ./tsconfig.build.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "StylusDB",
+    "SQL",
+    "Prisma"
+  ],
+  "author": "Chakshu Gautam",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "dependencies": {
+    "@prisma/driver-adapter-utils": "5.8.0-dev.15"
+  },
+  "devDependencies": {
+    "@tidbcloud/serverless": "^0.0.9",
+    "@types/node": "^20.5.1",
+    "tsup": "^7.2.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "@tidbcloud/serverless": "^0.0.9"
+  }
+}

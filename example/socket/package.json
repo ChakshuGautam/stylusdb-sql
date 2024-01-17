@@ -1,0 +1,11 @@
+{
+  "name": "socket-example",
+  "version": "1.0.0",
+  "description": "Socket Connection Example for StylusDB",
+  "main": "server.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Chakshu Gautam",
+  "license": "ISC"
+}

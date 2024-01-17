@@ -1,0 +1,30 @@
+name: CI Adapter
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: npm
+
+      - name: install dependencies
+        run: |
+          cd prisma/prisma-adapter
+          npm install --frozen-lockfile
+
+      - name: lint
+        run: |
+          cd prisma/prisma-adapter
+          npm run lint
+
+      - name: build
+        run: |
+          cd prisma/prisma-adapter
+          npm run build

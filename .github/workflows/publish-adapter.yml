@@ -1,0 +1,39 @@
+name: Publish Adapter to NPM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: npm/action-setup@v2
+        with:
+          version: 8.x.x
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+
+      # Publish Adapter
+      - run: |
+          cd prisma/prisma-adapter
+          npm install --frozen-lockfile
+
+      - run: |
+          cd prisma/prisma-adapter
+          npm build
+      - run: |
+          cd prisma/prisma-adapter
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      # Publish Database
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

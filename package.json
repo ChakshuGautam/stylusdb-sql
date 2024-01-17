@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "jest",
-    "test-verbose": "jest --verbose"
+    "test-verbose": "jest --verbose",
+    "server": "node ./src/server.js"
   },
   "bin": {
     "stylusdb-cli": "node ./src/cli.js"

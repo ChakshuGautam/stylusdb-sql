@@ -1,0 +1,23 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://127.0.0.1:5432/database?sslaccept=strict"
+}
+
+model Student {
+    id         Int          @id @default(autoincrement())
+    name       String
+    age        String
+    enrollment Enrollment[]
+}
+
+model Enrollment {
+    id        Int     @id @default(autoincrement())
+    studentId Int
+    course    String
+    student   Student @relation(fields: [studentId], references: [id])
+}

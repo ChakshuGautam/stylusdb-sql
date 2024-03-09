@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "generate": "node ./tests/generateLargeFile.js",
+    "generate": "node ./util/generateLargeFile.js",
     "test": "jest",
     "test-verbose": "jest --verbose",
     "server": "node ./src/server.js"

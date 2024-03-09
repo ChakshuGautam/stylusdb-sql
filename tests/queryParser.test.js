@@ -16,6 +16,9 @@ test('Parse SQL Query', () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -38,6 +41,9 @@ test('Parse SQL Query with WHERE Clause', () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -64,6 +70,9 @@ test('Parse SQL Query with Multiple WHERE Clauses', () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -82,6 +91,9 @@ test('Parse SQL Query with INNER JOIN', async () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     })
 });
 
@@ -100,6 +112,9 @@ test('Parse SQL Query with INNER JOIN and WHERE Clause', async () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     })
 });
 
@@ -160,6 +175,9 @@ test('Parse LEFT Join Query Completely', () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     })
 })
 
@@ -178,6 +196,9 @@ test('Parse LEFT Join Query Completely', () => {
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     })
 })
 
@@ -196,6 +217,9 @@ test('Parse SQL Query with LEFT JOIN with a WHERE clause filtering the main tabl
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -214,6 +238,9 @@ test('Parse SQL Query with LEFT JOIN with a WHERE clause filtering the join tabl
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -232,6 +259,9 @@ test('Parse SQL Query with RIGHT JOIN with a WHERE clause filtering the main tab
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -250,6 +280,9 @@ test('Parse SQL Query with RIGHT JOIN with a WHERE clause filtering the join tab
         orderByFields: null,
         limit: null,
         isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -268,7 +301,10 @@ test('Parse COUNT Aggregate Query', () => {
         joinType: null,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -287,7 +323,10 @@ test('Parse SUM Aggregate Query', () => {
         joinType: null,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -305,7 +344,10 @@ test('Parse AVG Aggregate Query', () => {
         joinType: null,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -323,7 +365,10 @@ test('Parse MIN Aggregate Query', () => {
         joinType: null,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -341,7 +386,10 @@ test('Parse MAX Aggregate Query', () => {
         joinType: null,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -359,7 +407,10 @@ test('Parse basic GROUP BY query', () => {
         hasAggregateWithoutGroupBy: false,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -377,7 +428,10 @@ test('Parse GROUP BY query with WHERE clause', () => {
         hasAggregateWithoutGroupBy: false,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -395,7 +449,10 @@ test('Parse GROUP BY query with multiple fields', () => {
         hasAggregateWithoutGroupBy: false,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -416,7 +473,10 @@ test('Parse GROUP BY query with JOIN and WHERE clauses', () => {
         hasAggregateWithoutGroupBy: false,
         orderByFields: null,
         limit: null,
-        isDistinct: false
+        isDistinct: false,
+        isApproximateCount: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -483,6 +543,7 @@ test('Parse SQL Query with Basic DISTINCT', () => {
         fields: ['age'],
         table: 'student',
         isDistinct: true,
+        isApproximateCount: false,
         whereClauses: [],
         groupByFields: null,
         joinType: null,
@@ -490,7 +551,9 @@ test('Parse SQL Query with Basic DISTINCT', () => {
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -501,6 +564,7 @@ test('Parse SQL Query with DISTINCT and Multiple Columns', () => {
         fields: ['student_id', 'course'],
         table: 'enrollment',
         isDistinct: true,
+        isApproximateCount: false,
         whereClauses: [],
         groupByFields: null,
         joinType: null,
@@ -508,7 +572,9 @@ test('Parse SQL Query with DISTINCT and Multiple Columns', () => {
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -519,6 +585,7 @@ test('Parse SQL Query with DISTINCT and WHERE Clause', () => {
         fields: ['course'],
         table: 'enrollment',
         isDistinct: true,
+        isApproximateCount: false,
         whereClauses: [{ field: 'student_id', operator: '=', value: '"1"' }],
         groupByFields: null,
         joinType: null,
@@ -526,7 +593,9 @@ test('Parse SQL Query with DISTINCT and WHERE Clause', () => {
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -537,6 +606,7 @@ test('Parse SQL Query with DISTINCT and JOIN Operations', () => {
         fields: ['student.name'],
         table: 'student',
         isDistinct: true,
+        isApproximateCount: false,
         whereClauses: [],
         groupByFields: null,
         joinType: 'INNER',
@@ -547,7 +617,9 @@ test('Parse SQL Query with DISTINCT and JOIN Operations', () => {
         },
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -558,6 +630,7 @@ test('Parse SQL Query with DISTINCT, ORDER BY, and LIMIT', () => {
         fields: ['age'],
         table: 'student',
         isDistinct: true,
+        isApproximateCount: false,
         whereClauses: [],
         groupByFields: null,
         joinType: null,
@@ -565,7 +638,9 @@ test('Parse SQL Query with DISTINCT, ORDER BY, and LIMIT', () => {
         joinCondition: null,
         orderByFields: [{ fieldName: 'age', order: 'DESC' }],
         limit: 2,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -576,6 +651,7 @@ test('Parse SQL Query with DISTINCT on All Columns', () => {
         fields: ['*'],
         table: 'student',
         isDistinct: true,
+        isApproximateCount: false,
         whereClauses: [],
         groupByFields: null,
         joinType: null,
@@ -583,7 +659,9 @@ test('Parse SQL Query with DISTINCT on All Columns', () => {
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -595,13 +673,16 @@ test('Parse SQL Query with LIKE Clause', () => {
         table: 'student',
         whereClauses: [{ field: 'name', operator: 'LIKE', value: '%Jane%' }],
         isDistinct: false,
+        isApproximateCount: false,
         groupByFields: null,
         joinType: null,
         joinTable: null,
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -613,13 +694,16 @@ test('Parse SQL Query with LIKE Clause and Wildcards', () => {
         table: 'student',
         whereClauses: [{ field: 'name', operator: 'LIKE', value: 'J%' }],
         isDistinct: false,
+        isApproximateCount: false,
         groupByFields: null,
         joinType: null,
         joinTable: null,
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -634,13 +718,16 @@ test('Parse SQL Query with Multiple LIKE Clauses', () => {
             { field: 'age', operator: 'LIKE', value: '2%' }
         ],
         isDistinct: false,
+        isApproximateCount: false,
         groupByFields: null,
         joinType: null,
         joinTable: null,
         joinCondition: null,
         orderByFields: null,
         limit: null,
-        hasAggregateWithoutGroupBy: false
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
     });
 });
 
@@ -653,6 +740,95 @@ test('Parse SQL Query with LIKE and ORDER BY Clauses', () => {
         whereClauses: [{ field: 'name', operator: 'LIKE', value: '%e%' }],
         orderByFields: [{ fieldName: 'age', order: 'DESC' }],
         isDistinct: false,
+        isApproximateCount: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
+    });
+});
+
+test('Parse SQL Query with APPROXIMATE_COUNT Function', () => {
+    const query = "SELECT APPROXIMATE_COUNT(id) FROM student";
+    const parsed = parseSelectQuery(query);
+    expect(parsed).toEqual({
+        fields: ['COUNT(id)'], // Assuming APPROXIMATE_COUNT is replaced with COUNT for simplicity
+        table: 'student',
+        whereClauses: [],
+        isDistinct: false,
+        isApproximateCount: true, // This flag should be true when APPROXIMATE_COUNT is used
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        orderByFields: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: true,
+        isCountDistinct: false,
+        distinctFields: []
+    });
+});
+
+test('Parse SQL Query with APPROXIMATE_COUNT and GROUP BY Clauses', () => {
+    const query = "SELECT APPROXIMATE_COUNT(id), course FROM enrollment GROUP BY course";
+    const parsed = parseSelectQuery(query);
+    expect(parsed).toEqual({
+        fields: ['COUNT(id)', 'course'], // Assuming APPROXIMATE_COUNT is replaced with COUNT for simplicity
+        table: 'enrollment',
+        whereClauses: [],
+        isDistinct: false,
+        isApproximateCount: true, // This flag should be true when APPROXIMATE_COUNT is used
+        groupByFields: ['course'],
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        orderByFields: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false,
+        isCountDistinct: false,
+        distinctFields: []
+    });
+});
+
+test('Parse SQL Query with APPROXIMATE_COUNT, WHERE, and ORDER BY Clauses', () => {
+    const query = "SELECT APPROXIMATE_COUNT(id) FROM student WHERE age > 20 ORDER BY age DESC";
+    const parsed = parseSelectQuery(query);
+    expect(parsed).toEqual({
+        fields: ['COUNT(id)'],
+        table: 'student',
+        whereClauses: [
+            { field: 'age', operator: '>', value: '20' }
+        ],
+        orderByFields: [{ fieldName: 'age', order: 'DESC' }],
+        isDistinct: false,
+        isApproximateCount: true,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: true,
+        isCountDistinct: false,
+        distinctFields: []
+    });
+});
+
+test('Parse SQL Query with APPROXIMATE_COUNT with DISTINCT on a column', () => {
+    const query = "SELECT APPROXIMATE_COUNT(DISTINCT (name)) FROM student";
+    const parsed = parseSelectQuery(query);
+    expect(parsed).toEqual({
+        fields: ['COUNT(DISTINCT (name))'],
+        table: 'student',
+        whereClauses: [],
+        orderByFields: null,
+        isDistinct: false,
+        distinctFields: ['name'],
+        isCountDistinct: true,
+        isApproximateCount: true,
         groupByFields: null,
         joinType: null,
         joinTable: null,
@@ -661,3 +837,46 @@ test('Parse SQL Query with LIKE and ORDER BY Clauses', () => {
         hasAggregateWithoutGroupBy: false
     });
 });
+
+test('Parse SQL Query with COUNT with DISTINCT on a column', () => {
+    const query = "SELECT COUNT(DISTINCT (name)) FROM student";
+    const parsed = parseSelectQuery(query);
+    expect(parsed).toEqual({
+        fields: ['COUNT(DISTINCT (name))'],
+        table: 'student',
+        whereClauses: [],
+        orderByFields: null,
+        isDistinct: false,
+        distinctFields: ['name'],
+        isCountDistinct: true,
+        isApproximateCount: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false
+    });
+});
+
+test('Parse SQL Query with COUNT with DISTINCT on multiple column', () => {
+    const query = "SELECT COUNT(DISTINCT (name, age)) FROM student";
+    const parsed = parseSelectQuery(query);
+    expect(parsed).toEqual({
+        fields: ['COUNT(DISTINCT (name, age))'],
+        table: 'student',
+        whereClauses: [],
+        orderByFields: null,
+        isDistinct: false,
+        distinctFields: ['name', 'age'],
+        isCountDistinct: true,
+        isApproximateCount: false,
+        groupByFields: null,
+        joinType: null,
+        joinTable: null,
+        joinCondition: null,
+        limit: null,
+        hasAggregateWithoutGroupBy: false
+    });
+});
+

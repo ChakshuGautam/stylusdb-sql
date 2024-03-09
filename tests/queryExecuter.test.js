@@ -418,3 +418,59 @@ test('LIKE with ORDER BY and LIMIT', async () => {
     // Expecting the first two names alphabetically that contain 'a'
     expect(result).toEqual([{ name: 'Alice' }, { name: 'Jane' }]);
 });
+
+
+test('Execute SQL Query with APPROXIMATE_COUNT Function', async () => {
+    const query = "SELECT APPROXIMATE_COUNT(id) FROM student";
+    const result = await executeSELECTQuery(query);
+    // Assuming APPROXIMATE_COUNT behaves like COUNT for testing
+    // Expecting the count of all student records
+    expect(result).toEqual([{ 'COUNT(id)': 5 }]); // Assuming there are 5 records in student.csv
+});
+
+test('Execute SQL Query with APPROXIMATE_COUNT and GROUP BY Clauses', async () => {
+    const query = "SELECT APPROXIMATE_COUNT(id), course FROM enrollment GROUP BY course";
+    const result = await executeSELECTQuery(query);
+    // Assuming APPROXIMATE_COUNT behaves like COUNT for testing
+    // Expecting the count of student records grouped by course
+    expect(result).toEqual([
+        { 'COUNT(id)': 2, course: 'Mathematics' }, // Assuming 2 students are enrolled in Mathematics
+        { 'COUNT(id)': 2, course: 'Physics' }, // Assuming 1 student is enrolled in Physics
+        { 'COUNT(id)': 1, course: 'Chemistry' }, // Assuming 1 student is enrolled in Chemistry
+        { 'COUNT(id)': 1, course: 'Biology' } // Assuming 1 student is enrolled in Biology
+    ]);
+});
+
+test('Execute SQL Query with APPROXIMATE_COUNT, WHERE, and ORDER BY Clauses', async () => {
+    const query = "SELECT APPROXIMATE_COUNT(id) FROM student WHERE age > '20' ORDER BY age DESC";
+    const result = await executeSELECTQuery(query);
+    // Assuming APPROXIMATE_COUNT behaves like COUNT for testing
+    // Expecting the count of students older than 20, ordered by age in descending order
+    // Note: The ORDER BY clause does not affect the outcome for a single aggregated result
+    expect(result).toEqual([{ 'COUNT(id)': 5 }]); // Assuming there are 4 students older than 20
+});
+
+
+test('Execute SQL Query with APPROXIMATE_COUNT only', async () => {
+    const query = "SELECT APPROXIMATE_COUNT(*) FROM student";
+    const result = await executeSELECTQuery(query);
+    expect(result).toEqual([{ 'APPROXIMATE_COUNT(*)': 5 }]);
+});
+
+test('Execute SQL Query with APPROXIMATE_COUNT with DISTINCT on a column', async () => {
+    const query = "SELECT APPROXIMATE_COUNT(DISTINCT (name)) FROM student";
+    const result = await executeSELECTQuery(query);
+    expect(result).toEqual([{ 'APPROXIMATE_COUNT(DISTINCT (name))': 4 }]);
+});
+
+test('Execute SQL Query with COUNT with DISTINCT on a column', async () => {
+    const query = "SELECT COUNT(DISTINCT (name)) FROM student";
+    const result = await executeSELECTQuery(query);
+    expect(result).toEqual([{ 'COUNT(DISTINCT (name))': 4 }]);
+});
+
+test('Execute SQL Query with COUNT with DISTINCT on a column', async () => {
+    const query = "SELECT COUNT(DISTINCT (name, age)) FROM student";
+    const result = await executeSELECTQuery(query);
+    expect(result).toEqual([{ 'COUNT(DISTINCT (name, age))': 5 }]);
+});

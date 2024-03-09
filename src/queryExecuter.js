@@ -1,5 +1,7 @@
 const { parseSelectQuery, parseInsertQuery, parseDeleteQuery } = require('./queryParser.js');
-const { readCSV, writeCSV } = require('./csvStorage.js');
+const { readCSV, readCSVForHLL, writeCSV } = require('./csvStorage.js');
+const hll = require('hll');
+
 
 function performInnerJoin(data, joinData, joinCondition, fields, table) {
     return data.flatMap(mainRow => {
@@ -203,8 +205,14 @@ function applyGroupBy(data, groupByFields, aggregateFunctions) {
 
 async function executeSELECTQuery(query) {
     try {
+        const { fields, table, whereClauses, joinType, joinTable, joinCondition, groupByFields, hasAggregateWithoutGroupBy, isApproximateCount, orderByFields, limit, isDistinct, distinctFields, isCountDistinct } = parseSelectQuery(query);
 
-        const { fields, table, whereClauses, joinType, joinTable, joinCondition, groupByFields, hasAggregateWithoutGroupBy, orderByFields, limit, isDistinct } = parseSelectQuery(query);
+
+        if (isApproximateCount && fields.length === 1 && fields[0] === 'COUNT(*)' && whereClauses.length === 0) {
+            let hll = await readCSVForHLL(`${table}.csv`);
+            return [{ 'APPROXIMATE_COUNT(*)': hll.estimate() }];
+        }
+
         let data = await readCSV(`${table}.csv`);
 
         // Perform INNER JOIN if specified
@@ -228,6 +236,7 @@ async function executeSELECTQuery(query) {
         let filteredData = whereClauses.length > 0
             ? data.filter(row => whereClauses.every(clause => evaluateCondition(row, clause)))
             : data;
+
 
         let groupResults = filteredData;
         if (hasAggregateWithoutGroupBy) {
@@ -293,6 +302,20 @@ async function executeSELECTQuery(query) {
                 });
             }
 
+            // Distinct inside count - example "SELECT COUNT (DISTINCT student.name) FROM student"
+            if (isCountDistinct) {
+
+                if (isApproximateCount) {
+                    var h = hll({ bitSampleSize: 12, digestSize: 128 });
+                    orderedResults.forEach(row => h.insert(distinctFields.map(field => row[field]).join('|')));
+                    return [{ [`APPROXIMATE_${fields[0]}`]: h.estimate() }];
+                }
+                else {
+                    let distinctResults = [...new Map(orderedResults.map(item => [distinctFields.map(field => item[field]).join('|'), item])).values()];
+                    return [{ [fields[0]]: distinctResults.length }];
+                }
+            }
+
             // Select the specified fields
             let finalResults = orderedResults.map(row => {
                 const selectedRow = {};
@@ -302,6 +325,8 @@ async function executeSELECTQuery(query) {
                 });
                 return selectedRow;
             });
+
+            // console.log("CP-2", orderedResults)
 
             // Remove duplicates if specified
             let distinctResults = finalResults;

@@ -8,7 +8,25 @@ function parseSelectQuery(query) {
         query = query.trim();
 
         // Initialize distinct flag
-        let isDistinct = false;
+        let isDistinct = false; // Global DISTINCT, not within COUNT
+        let isCountDistinct = false; // New flag for DISTINCT within COUNT
+        let distinctFields = []; // Array to hold fields after DISTINCT within COUNT or APPROXIMATE_COUNT
+
+
+        // Detect APPROXIMATE_COUNT
+        let isApproximateCount = false;
+        const approximateCountRegex = /APPROXIMATE_COUNT\((DISTINCT\s)?(.+?)\)/i;
+        const approximateCountMatch = query.match(approximateCountRegex);
+        if (approximateCountMatch) {
+            isApproximateCount = true;
+            // If DISTINCT is used within APPROXIMATE_COUNT, capture the fields
+            if (approximateCountMatch[1]) {
+                isCountDistinct = true;
+                // distinctFields.push(approximateCountMatch[2].trim());
+            }
+            // Simplify further processing by normalizing to COUNT (adjust as necessary for your logic)
+            query = query.replace(approximateCountRegex, `COUNT(${approximateCountMatch[1] || ''}${approximateCountMatch[2]})`);
+        }
 
         // Check for DISTINCT keyword and update the query
         if (query.toUpperCase().includes('SELECT DISTINCT')) {
@@ -59,13 +77,24 @@ function parseSelectQuery(query) {
         // Extract JOIN information
         const { joinType, joinTable, joinCondition } = parseJoinClause(queryWithoutWhere);
 
+        const countDistinctRegex = /COUNT\((DISTINCT\s\((.*?)\))\)/gi;
+        let countDistinctMatch;
+        while ((countDistinctMatch = countDistinctRegex.exec(query)) !== null) {
+            isCountDistinct = true;
+            if (isApproximateCount) {
+                distinctFields.push(...countDistinctMatch[2].trim().split(',').map(field => field.trim()));
+            } else {
+                distinctFields.push(...countDistinctMatch[2].trim().split(',').map(field => field.trim()));
+            }
+        }
+
         // Parse SELECT part
         const selectRegex = /^SELECT\s(.+?)\sFROM\s(.+)/i;
         const selectMatch = selectPart.match(selectRegex);
         if (!selectMatch) {
             throw new Error('Invalid SELECT format');
         }
-        const [, fields, table] = selectMatch;
+        let [, fields, table] = selectMatch;
 
         // Parse WHERE part if it exists
         let whereClauses = [];
@@ -76,8 +105,17 @@ function parseSelectQuery(query) {
         // Check for aggregate functions without GROUP BY
         const hasAggregateWithoutGroupBy = checkAggregateWithoutGroupBy(query, groupByFields);
 
+        // Temporarily replace commas within parentheses to avoid incorrect splitting
+        const tempPlaceholder = '__TEMP_COMMA__'; // Ensure this placeholder doesn't appear in your actual queries
+        fields = fields.replace(/\(([^)]+)\)/g, (match) => match.replace(/,/g, tempPlaceholder));
+
+        // Now split fields and restore any temporary placeholders
+        const parsedFields = fields.split(',').map(field =>
+            field.trim().replace(new RegExp(tempPlaceholder, 'g'), ','));
+
+
         return {
-            fields: fields.split(',').map(field => field.trim()),
+            fields: parsedFields,
             table: table.trim(),
             whereClauses,
             joinType,
@@ -86,7 +124,10 @@ function parseSelectQuery(query) {
             groupByFields,
             orderByFields,
             hasAggregateWithoutGroupBy,
+            isApproximateCount,
+            isCountDistinct,
             limit,
+            distinctFields,
             isDistinct
         };
     } catch (error) {

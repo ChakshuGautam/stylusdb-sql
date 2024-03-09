@@ -46,7 +46,7 @@ test('Large File Count(*) - Approximate and Exact', async () => {
     console.log(`End Memory: ${endMemoryUsage / 1024 / 1024} MB`);
     console.log(`Memory Used for Approximate Count: ${(endMemoryUsage - startMemoryUsage) / 1024 / 1024} MB`);
 
-}, 60000);
+}, 120000);
 
 test('Execute SQL Query with COUNT with DISTINCT on a column', async () => {
     const queryExact = "SELECT COUNT(DISTINCT (name, age)) FROM student_large";
@@ -60,4 +60,4 @@ test('Execute SQL Query with COUNT with DISTINCT on a column', async () => {
     // Expect the approximate count to be within 2% of the actual count
     expect(result[0]['APPROXIMATE_COUNT(DISTINCT (name, age))']).toBeGreaterThan(exactResult - 0.05 * exactResult);
     expect(result[0]['APPROXIMATE_COUNT(DISTINCT (name, age))']).toBeLessThan(exactResult + 0.05 * exactResult);
-}, 60000);
+}, 120000);

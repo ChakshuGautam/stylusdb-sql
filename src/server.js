@@ -46,15 +46,8 @@ const queryQueue = new QueryQueue();
 queryQueue.on('newQuery', () => queryQueue.processQueue());
 
 const server = net.createServer();
-let activeConnection = false;
 
 server.on('connection', (socket) => {
-    if (activeConnection) {
-        socket.end('Another connection is already active.');
-        return;
-    }
-    activeConnection = true;
-
     socket.write('Connected\n');
 
     socket.on('data', (data) => {
@@ -68,10 +61,6 @@ server.on('connection', (socket) => {
             }
             socket.write(response + '\n');
         });
-    });
-
-    socket.on('close', () => {
-        activeConnection = false;
     });
 });
 

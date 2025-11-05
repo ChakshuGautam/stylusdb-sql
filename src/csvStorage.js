@@ -3,6 +3,7 @@ const path = require('path');
 const csv = require('csv-parser');
 const { parse } = require('json2csv');
 const hll = require('hll');
+const { ValidationError, SecurityError, FileSystemError, TableNotFoundError } = require('./errors');
 
 // Get the data directory - defaults to current directory
 const DATA_DIR = path.resolve(process.env.DATA_DIR || '.');
@@ -19,7 +20,11 @@ function validateTableName(tableName) {
 
     // Only allow alphanumeric characters, underscores, and hyphens
     if (!/^[a-zA-Z0-9_-]+$/.test(cleanName)) {
-        throw new Error(`Invalid table name: ${tableName}. Only alphanumeric characters, underscores, and hyphens are allowed.`);
+        throw new ValidationError(
+            `Invalid table name: ${tableName}. Only alphanumeric characters, underscores, and hyphens are allowed.`,
+            'tableName',
+            tableName
+        );
     }
 
     return cleanName;
@@ -37,7 +42,7 @@ function getSafeFilePath(filename) {
 
     // Reject any remaining path traversal attempts
     if (cleanFilename.includes('..') || cleanFilename.includes('/') || cleanFilename.includes('\\')) {
-        throw new Error('Path traversal detected. Only simple table names are allowed.');
+        throw new SecurityError('Path traversal detected. Only simple table names are allowed.');
     }
 
     // Extract table name from filename
@@ -51,7 +56,7 @@ function getSafeFilePath(filename) {
 
     // Ensure the resolved path is within the data directory
     if (!safePath.startsWith(DATA_DIR + path.sep) && safePath !== path.resolve(DATA_DIR, `${tableName}.csv`)) {
-        throw new Error('Path traversal detected. Access denied.');
+        throw new SecurityError('Path traversal detected. Access denied.');
     }
 
     return safePath;
@@ -60,8 +65,14 @@ function getSafeFilePath(filename) {
 function readCSV(filePath) {
     const results = [];
     const safePath = getSafeFilePath(filePath);
+    const tableName = path.basename(filePath, '.csv');
 
     return new Promise((resolve, reject) => {
+        // Check if file exists first
+        if (!fs.existsSync(safePath)) {
+            return reject(new TableNotFoundError(tableName));
+        }
+
         fs.createReadStream(safePath)
             .pipe(csv())
             .on('data', (data) => results.push(data))
@@ -69,7 +80,15 @@ function readCSV(filePath) {
                 resolve(results);
             })
             .on('error', (error) => {
-                reject(error);
+                if (error.code === 'ENOENT') {
+                    reject(new TableNotFoundError(tableName, error));
+                } else {
+                    reject(new FileSystemError(
+                        `Error reading CSV file: ${error.message}`,
+                        safePath,
+                        error
+                    ));
+                }
             });
     });
 }
@@ -77,9 +96,15 @@ function readCSV(filePath) {
 function readCSVForHLL(filePath, bitSampleSize = 12, digestSize = 128) {
     const results = [];
     const safePath = getSafeFilePath(filePath);
+    const tableName = path.basename(filePath, '.csv');
     var h = hll({ bitSampleSize: bitSampleSize, digestSize: digestSize });
 
     return new Promise((resolve, reject) => {
+        // Check if file exists first
+        if (!fs.existsSync(safePath)) {
+            return reject(new TableNotFoundError(tableName));
+        }
+
         fs.createReadStream(safePath)
             .pipe(csv())
             .on('data', (data) => h.insert(JSON.stringify(data)))
@@ -87,7 +112,15 @@ function readCSVForHLL(filePath, bitSampleSize = 12, digestSize = 128) {
                 resolve(h);
             })
             .on('error', (error) => {
-                reject(error);
+                if (error.code === 'ENOENT') {
+                    reject(new TableNotFoundError(tableName, error));
+                } else {
+                    reject(new FileSystemError(
+                        `Error reading CSV file: ${error.message}`,
+                        safePath,
+                        error
+                    ));
+                }
             });
     });
 }
@@ -96,8 +129,16 @@ async function writeCSV(filename, data) {
     const safePath = getSafeFilePath(filename);
     const csv = parse(data);
 
-    // Use async writeFile instead of blocking writeFileSync
-    await fs.promises.writeFile(safePath, csv, 'utf8');
+    try {
+        // Use async writeFile instead of blocking writeFileSync
+        await fs.promises.writeFile(safePath, csv, 'utf8');
+    } catch (error) {
+        throw new FileSystemError(
+            `Error writing CSV file: ${error.message}`,
+            safePath,
+            error
+        );
+    }
 }
 
 module.exports = { readCSV, readCSVForHLL, writeCSV, validateTableName, getSafeFilePath };

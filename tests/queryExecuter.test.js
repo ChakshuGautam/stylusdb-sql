@@ -306,7 +306,7 @@ test('Execute SQL Query with LIMIT and ORDER BY clause', async () => {
 
 test('Error Handling with Malformed Query', async () => {
     const query = 'SELECT FROM table'; // intentionally malformed
-    await expect(executeSELECTQuery(query)).rejects.toThrow("Error executing query: Query parsing error: Invalid SELECT format");
+    await expect(executeSELECTQuery(query)).rejects.toThrow("Error executing SELECT query: Query parsing error: Invalid SELECT format");
 });
 
 test('Basic DISTINCT Usage', async () => {

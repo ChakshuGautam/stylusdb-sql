@@ -1,5 +1,6 @@
 const { parseSelectQuery, parseInsertQuery, parseDeleteQuery } = require('./queryParser.js');
 const { readCSV, readCSVForHLL, writeCSV } = require('./csvStorage.js');
+const { ColumnNotFoundError, QueryExecutionError } = require('./errors.js');
 const hll = require('hll');
 
 
@@ -89,7 +90,8 @@ function evaluateCondition(row, clause) {
 
     // Check if the field exists in the row
     if (row[field] === undefined) {
-        throw new Error(`Invalid field: ${field}`);
+        const availableColumns = Object.keys(row);
+        throw new ColumnNotFoundError(field, null, availableColumns);
     }
 
     // Parse row value and condition value based on their actual types
@@ -344,13 +346,23 @@ async function executeSELECTQuery(query) {
 
         }
     } catch (error) {
-        throw new Error(`Error executing query: ${error.message}`);
+        // Re-throw custom errors as-is
+        if (error.name && error.name.includes('Error') && error.name !== 'Error') {
+            throw error;
+        }
+        // Wrap generic errors in QueryExecutionError
+        throw new QueryExecutionError(
+            `Error executing SELECT query: ${error.message}`,
+            query,
+            error
+        );
     }
 }
 
 async function executeINSERTQuery(query) {
-    const { table, columns, values, returningColumns } = parseInsertQuery(query);
-    const data = await readCSV(`${table}.csv`);
+    try {
+        const { table, columns, values, returningColumns } = parseInsertQuery(query);
+        const data = await readCSV(`${table}.csv`);
 
     // Check if 'id' column is included in the query and in CSV headers
     let newId = null;
@@ -393,17 +405,30 @@ async function executeINSERTQuery(query) {
         });
     }
 
-    return {
-        message: "Row inserted successfully.",
-        insertedId: newId,
-        returning: returningResult
-    };
+        return {
+            message: "Row inserted successfully.",
+            insertedId: newId,
+            returning: returningResult
+        };
+    } catch (error) {
+        // Re-throw custom errors as-is
+        if (error.name && error.name.includes('Error') && error.name !== 'Error') {
+            throw error;
+        }
+        // Wrap generic errors in QueryExecutionError
+        throw new QueryExecutionError(
+            `Error executing INSERT query: ${error.message}`,
+            query,
+            error
+        );
+    }
 }
 
 
 async function executeDELETEQuery(query) {
-    const { table, whereClauses } = parseDeleteQuery(query);
-    let data = await readCSV(`${table}.csv`);
+    try {
+        const { table, whereClauses } = parseDeleteQuery(query);
+        let data = await readCSV(`${table}.csv`);
 
     if (whereClauses.length > 0) {
         // Filter out the rows that meet the where clause conditions
@@ -413,10 +438,22 @@ async function executeDELETEQuery(query) {
         data = [];
     }
 
-    // Save the updated data back to the CSV file
-    await writeCSV(`${table}.csv`, data);
+        // Save the updated data back to the CSV file
+        await writeCSV(`${table}.csv`, data);
 
-    return { message: "Rows deleted successfully." };
+        return { message: "Rows deleted successfully." };
+    } catch (error) {
+        // Re-throw custom errors as-is
+        if (error.name && error.name.includes('Error') && error.name !== 'Error') {
+            throw error;
+        }
+        // Wrap generic errors in QueryExecutionError
+        throw new QueryExecutionError(
+            `Error executing DELETE query: ${error.message}`,
+            query,
+            error
+        );
+    }
 }
 
 

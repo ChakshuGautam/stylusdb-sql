@@ -11,6 +11,12 @@ afterEach(() => {
 });
 
 test('Large File Count(*) - Approximate and Exact', async () => {
+    // Skip test if large file doesn't exist
+    if (!fs.existsSync('student_large.csv')) {
+        console.log('Skipping test: student_large.csv not found. Run `npm run generate` to create it.');
+        return;
+    }
+
     // Test Exact Count
 
     const startMemoryUsageExact = process.memoryUsage().heapUsed;
@@ -49,6 +55,12 @@ test('Large File Count(*) - Approximate and Exact', async () => {
 }, 120000);
 
 test('Execute SQL Query with COUNT with DISTINCT on a column', async () => {
+    // Skip test if large file doesn't exist
+    if (!fs.existsSync('student_large.csv')) {
+        console.log('Skipping test: student_large.csv not found. Run `npm run generate` to create it.');
+        return;
+    }
+
     const queryExact = "SELECT COUNT(DISTINCT (name, age)) FROM student_large";
     const resultExact = await executeSELECTQuery(queryExact);
     console.log({ resultExact });
